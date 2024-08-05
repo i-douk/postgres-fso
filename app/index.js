@@ -5,20 +5,29 @@ const app = express()
 
 const sequelize = new Sequelize(process.env.DATABASE_URL)
 
-class Note extends Model {}
-Note.init({
+class Blog extends Model {}
+Blog.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    content: {
+    title: {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    important: {
-        type: DataTypes.BOOLEAN
+    author: {
+        type: DataTypes.TEXT,
+        allowNull: false
     },
+    url: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    likes: {
+        type: DataTypes.NUMBER,
+    },
+    
     date: {
         type: DataTypes.DATE
     }},
