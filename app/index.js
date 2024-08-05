@@ -18,14 +18,13 @@ Blog.init({
     },
     author: {
         type: DataTypes.TEXT,
-        allowNull: false
     },
     url: {
         type: DataTypes.TEXT,
         allowNull: false
     },
     likes: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
     },
     
     date: {
@@ -35,21 +34,34 @@ Blog.init({
         sequelize,
         underscored: true,
         timestamps: false,
-        modelName: 'note'})
+        modelName: 'blog'})
 
-app.get('/api/notes', async (req, res) => {
-    const notes = await Note.findAll()
-    res.json(notes)
-})
 
-app.post('/api/notes', async (req, res) => {
+const main = async () => {
     try {
-      const note = await Note.create(req.body)
-      return res.json(note)
-    } catch(error) {
-      return res.status(400).json({ error })
+        await sequelize.authenticate()
+        const blogs = await Blog.findAll()
+        blogs.forEach(blog =>{console.log(`${blog.dataValues.author} : ${blog.dataValues.title}, ${blog.dataValues.likes} likes`)})
+    } catch (error) {
+        console.error('Unable to connect to the database:', error)
     }
-  })
+    }
+    
+main()
+
+// app.get('/api/notes', async (req, res) => {
+//     const notes = await Note.findAll()
+//     res.json(notes)
+// })
+
+// app.post('/api/notes', async (req, res) => {
+//     try {
+//       const note = await Note.create(req.body)
+//       return res.json(note)
+//     } catch(error) {
+//       return res.status(400).json({ error })
+//     }
+//   })
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
