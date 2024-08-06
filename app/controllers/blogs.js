@@ -4,14 +4,11 @@ const { Blog } = require('../models')
 const { sequelize } = require('../util/db')
 
 const main = async () => {
-    try {
         await sequelize.authenticate()
         const blogs = await Blog.findAll()
         console.log(JSON.stringify(blogs))
         blogs.forEach(blog =>{console.log(`${blog.toJSON().author} : ${blog.toJSON().title}, ${blog.toJSON().likes} likes`)})
-    } catch (error) {
-        console.error('Unable to connect to the database:', error)
-    }
+   
     }
     
 main()
@@ -27,12 +24,8 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    try {
       const blog = await Blog.create(req.body)
       return res.json(blog)
-    } catch(error) {
-      return res.status(400).json({ error })
-    }
   })
 
 router.get('/:id', blogFinder, async (req, res) => {
@@ -44,16 +37,13 @@ if (req.blog) {
 })
 
 router.delete('/:id', blogFinder, async (req, res) => {
-try {
     if (req.blog) {
         await req.blog.destroy()
         res.status(204).end()
     } else {
         res.status(404).end()
     }
-} catch (error) {
-    res.status(500).json({ error: 'Something went wrong' })
-}
+
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
