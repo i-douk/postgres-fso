@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { Blog } = require('../models')
+const { Blog, User } = require('../models')
 const { sequelize } = require('../util/db')
 
 const main = async () => {
@@ -24,8 +24,9 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-      const blog = await Blog.create(req.body)
-      return res.json(blog)
+  const user = await User.findOne()
+  const blog = await Blog.create({...req.body, userId: user.id})
+  res.json(blog)
   })
 
 router.get('/:id', blogFinder, async (req, res) => {
