@@ -60,14 +60,16 @@ if (req.blog) {
 }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
+router.delete('/:id', blogFinder, tokenExtractor , async (req, res) => {
     if (req.blog) {
-        await req.blog.destroy()
-        res.status(204).end()
+       const user = await User.findByPk(req.decodedToken.id)
+        if( user.id == req.blog.userId) {
+          await req.blog.destroy()
+          res.status(204).end()
+        }
     } else {
         res.status(404).end()
     }
-
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
