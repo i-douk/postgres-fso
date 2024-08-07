@@ -23,10 +23,7 @@ Blog.init({
     likes: {
         type: DataTypes.INTEGER,
     },
-    
-    date: {
-        type: DataTypes.DATE
-    }},
+    },
     {
         sequelize,
         underscored: true,
