@@ -49,7 +49,10 @@ router.get('/', async (req, res) => {
       model: User,
       attributes: ['name']
     },
-    where
+    where,
+    order : [
+      [sequelize.literal('COALESCE("likes", 0)'), 'DESC']
+    ]
   })
   res.json(blogs)
 })
