@@ -26,6 +26,19 @@ module.exports = {
           allowNull: false,
           defaultValue: 0
         },
+        year: {
+          type: DataTypes.INTEGER,
+          validate: {
+            min: {
+              args: 1991,
+              msg: 'Year should be between 1991 and the current year.',
+            },
+            max: {
+              args: new Date().getFullYear(),
+              msg: 'Year should be between 1991 and the current year.',
+            },
+          },
+        },
         created_at: DataTypes.DATE,
         updated_at: DataTypes.DATE,
         
