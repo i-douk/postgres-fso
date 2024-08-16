@@ -10,35 +10,23 @@ module.exports = {
           allowNull: false
         },
         title: {
-          type: Sequelize.TEXT,
+          type: DataTypes.STRING,
           allowNull: false
         },
         author: {
-          type: Sequelize.TEXT,
+          type: DataTypes.STRING,
           allowNull: true
         },
         url: {
-          type: Sequelize.TEXT,
+          type: DataTypes.STRING,
           allowNull: false
         },
         likes: {
-          type: Sequelize.INTEGER,
+          type: DataTypes.INTEGER,
           allowNull: false,
           defaultValue: 0
         },
-        year: {
-          type: DataTypes.INTEGER,
-          validate: {
-            min: {
-              args: 1991,
-              msg: 'Year should be between 1991 and the current year.',
-            },
-            max: {
-              args: new Date().getFullYear(),
-              msg: 'Year should be between 1991 and the current year.',
-            },
-          },
-        },
+    
         created_at: DataTypes.DATE,
         updated_at: DataTypes.DATE,
         
