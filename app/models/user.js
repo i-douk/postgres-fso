@@ -27,7 +27,8 @@ User.init({
   admin: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
-  },  disabled: {
+  }, 
+  disabled: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },

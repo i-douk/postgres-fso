@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { User, Blog } = require('../models');
-const { tokenExtractor } = require('../util/middleware');
+const { tokenExtractor , isAdmin } = require('../util/middleware');
 
 // Get all users with their blogs
 router.get('/', async (req, res) => {
@@ -36,7 +36,7 @@ router.get('/:username', async (req, res) => {
   try {
     const user = await User.findOne({ 
       where: { username: req.params.username },
-      attributes: { exclude: [] },
+      attributes: { exclude: [''] },
       include: [
         {
           model: Blog,
@@ -67,13 +67,14 @@ router.get('/:username', async (req, res) => {
 
 // Get a user by ID with an optional read filter
 router.get('/:id', async (req, res) => {
+
   const { read } = req.query;
   const readFilter = read === 'true' ? true : read === 'false' ? false : undefined;
-  console.log(`Fetching user with ID: ${req.params.id}`); 
-  try {
+  
+
     const user = await User.findOne({ 
       where: { id: req.params.id},
-      attributes: { exclude: [] },
+      attributes: { exclude: [''] },
       include: [
         {
           model: Blog,
@@ -86,7 +87,6 @@ router.get('/:id', async (req, res) => {
           through: {
             attributes: ['read', 'id'],
             where: readFilter !== undefined ? { read: readFilter } : {}
-
           }
         }
       ]
@@ -96,11 +96,8 @@ router.get('/:id', async (req, res) => {
     } else {
       res.status(404).json({ error: 'User not found' });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Something went wrong' });
-  }
 });
+
 // Update a user's name
 router.put('/:username', async (req, res) => {
   try {
@@ -117,20 +114,6 @@ router.put('/:username', async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
-
-// Middleware to check if the user is an admin
-const isAdmin = async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.decodedToken.id);
-    if (!user.admin) {
-      return res.status(401).json({ error: 'Operation not allowed' });
-    }
-    next();
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Something went wrong' });
-  }
-};
 
 // Admin can disable a user
 router.put('/:username', tokenExtractor, isAdmin, async (req, res) => {
