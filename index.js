@@ -20,7 +20,7 @@ app.use('/api/authors', authorsRouter)
 app.use('/api/readinglists', readinglistsRouter)
 app.use('/api/logout', logoutRouter)
 // Sync Sequelize models with the database
-sequelize.sync({ force: false }) 
+sequelize.sync({ force: true }) 
   .then(() => {
     console.log('Database synchronized');
     app.listen(PORT, () => {
@@ -30,11 +30,11 @@ sequelize.sync({ force: false })
   .catch(error => {
     console.error('Unable to sync database:', error);
   });
-// const start = async () => {
-//   await connectToDatabase()
-//   app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`)
-//   })
-// }
+const start = async () => {
+  await connectToDatabase()
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
+}
 
-// start()
+start()
